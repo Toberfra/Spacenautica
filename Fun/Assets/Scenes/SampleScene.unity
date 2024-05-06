@@ -959,7 +959,7 @@ MonoBehaviour:
   Anchor: {fileID: 1710412973}
   Player: {fileID: 1044986302}
   pm: {fileID: 0}
-  PullSpeed: 7
+  PullSpeed: 70
   XFaktor: 0
   YFaktor: 0
   ZFaktor: 0
