@@ -14,7 +14,7 @@ public class SafetyRope : MonoBehaviour
     public float XFaktor = 0;
     public float YFaktor = 0;
     public float ZFaktor = 0;
-    private float abstand = 0;
+    //private float abstand = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -28,31 +28,19 @@ public class SafetyRope : MonoBehaviour
         if (test)
         {
             lr.SetPosition(0, Player.position);
-            //if (Mathf.Sqrt((Rope.position.x - Anchor.position.x) * (Rope.position.x - Anchor.position.x) + (Rope.position.y - Anchor.position.y) * (Rope.position.y - Anchor.position.y) + (Rope.position.z - Anchor.position.z) * (Rope.position.z - Anchor.position.z)) > 50)
-            //{
-            //    Debug.Log("Rope zu lang");
-            //}
-            float abstandX = Player.position.x - Anchor.position.x;
-            float abstandY = Player.position.y - Anchor.position.y;
-            float abstandZ = Player.position.z - Anchor.position.z;
-            abstand = Mathf.Sqrt(abstandX*abstandX + abstandY*abstandY + abstandZ*abstandZ );
-            if (abstand > 50)
+            
+            Vector3 abstand = Player.position - Anchor.position;
+
+            if(abstand.sqrMagnitude > 50*50  )  
 
             {
-                Debug.Log("Rope zu lang");
-                float faktor = 50 / abstand;
-                float NewX =  Anchor.position.x + abstandX * faktor;
-                float NewY =  Anchor.position.y + abstandY * faktor;
-                float NewZ =  Anchor.position.z + abstandZ * faktor;
-                Player.position = new Vector3 (NewX, NewY, NewZ);
+                //Debug.Log("Rope zu lang");
+                Player.position = Anchor.position + Vector3.ClampMagnitude(abstand,50);
                 pm.Stop();
             }
             if (Input.GetKey(KeyCode.E))
             {
-                XFaktor = Player.position.x - PullSpeed * (abstandX / abstand) * Time.deltaTime;
-                YFaktor = Player.position.y - PullSpeed * (abstandY / abstand) * Time.deltaTime;
-                ZFaktor = Player.position.z - PullSpeed * (abstandZ / abstand) * Time.deltaTime;
-                Player.position = new Vector3 (XFaktor, YFaktor, ZFaktor);
+                Player.position -= abstand.normalized * PullSpeed * Time.deltaTime;
                 pm.Stop();
             }
         }
